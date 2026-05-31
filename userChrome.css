@@ -30,7 +30,6 @@
 
 /* ===== ПОИСКОВАЯ СТРОКА — SHRINK/EXPAND ===== */
 
-/* Центрируем тулбар чтобы строка была по центру */
 #nav-bar {
   display: flex !important;
   justify-content: center !important;
@@ -60,35 +59,68 @@
   outline-offset: 0px !important;
 }
 
-/* Фон строки сливается с темой */
+/* Фон строки */
 #urlbar .urlbar-background {
   background-color: var(--toolbar-bgcolor) !important;
   border-color: transparent !important;
   box-shadow: none !important;
 }
 
-/* ===== ПОКАЗЫВАТЬ ТОЛЬКО ДОМЕН В НЕАКТИВНОМ СОСТОЯНИИ ===== */
-
-/* Скрываем путь (всё после домена) когда строка не в фокусе */
-#urlbar:not([focused]) .urlbar-input {
-  /* Обрезаем до домена через маску */
-  --urlbar-endcap-size: 0px;
+/* Текст по центру когда строка неактивна */
+#urlbar:not([focused]):not([open]) .urlbar-input {
+  text-align: center !important;
 }
 
-/* Скрываем scheme (https://) в неактивном состоянии */
-#urlbar:not([focused]) .urlbar-input-box > .urlbar-input {
-  direction: ltr !important;
+#urlbar[focused] .urlbar-input,
+#urlbar[open] .urlbar-input {
+  text-align: left !important;
 }
 
-/* Показываем только домен: скрываем путь после первого / */
-#urlbar:not([focused]):not([open]) .urlbar-input-container .urlbar-input {
-  text-overflow: ellipsis !important;
+/* ===== КНОПКИ ВНУТРИ СТРОКИ — СКРЫТЫ КОГДА НЕАКТИВНА ===== */
+
+/* Скрываем все page-action кнопки в неактивном состоянии */
+#urlbar:not([focused]):not([open]) ~ #page-action-buttons,
+#urlbar:not([focused]):not([open]) #page-action-buttons,
+#urlbar-container:not(:has(#urlbar[focused])):not(:has(#urlbar[open])) #page-action-buttons {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 200ms ease !important;
+}
+
+#urlbar-container:has(#urlbar[focused]) #page-action-buttons,
+#urlbar-container:has(#urlbar[open]) #page-action-buttons {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transition: opacity 200ms ease !important;
+}
+
+/* Конкретные кнопки внутри строки — скрыты когда неактивна */
+#urlbar:not([focused]):not([open]) #reader-mode-button,
+#urlbar:not([focused]):not([open]) #translations-button,
+#urlbar:not([focused]):not([open]) #urlbar-zoom-button,
+#urlbar:not([focused]):not([open]) #picture-in-picture-button,
+#urlbar:not([focused]):not([open]) .urlbar-page-action,
+#urlbar:not([focused]):not([open]) #identity-box {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 150ms ease !important;
+  width: 0 !important;
   overflow: hidden !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
-/* Скрыть https:// схему */
-#urlbar:not([focused]) #urlbar-scheme {
-  display: none !important;
+#urlbar[focused] #reader-mode-button,
+#urlbar[focused] #translations-button,
+#urlbar[focused] #urlbar-zoom-button,
+#urlbar[focused] #picture-in-picture-button,
+#urlbar[focused] .urlbar-page-action,
+#urlbar[focused] #identity-box {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transition: opacity 150ms ease !important;
+  width: unset !important;
+  overflow: unset !important;
 }
 
 /* ===== СКРЫТЫЕ КНОПКИ ===== */
