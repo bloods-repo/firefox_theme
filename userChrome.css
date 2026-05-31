@@ -28,10 +28,55 @@
   opacity: 1 !important;
 }
 
-/* ===== ПОИСКОВАЯ СТРОКА ===== */
-#urlbar,
-#urlbar:not([focused]),
-#urlbar[focused] {
+/* ===== ПОИСКОВАЯ СТРОКА — SHRINK/EXPAND ===== */
+
+/* Анимация расширения при фокусе */
+@keyframes urlbar-expand {
+  from {
+    opacity: 0.7;
+    transform: scaleX(0.82);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+/* Контейнер строки — центрируем трансформацию */
+#urlbar-container {
+  transform-origin: center !important;
+}
+
+/* Строка в обычном состоянии — уменьшена */
+#urlbar:not([focused]):not([breakout-extend]) {
+  --urlbar-zoom: 0.82;
+  transform: scaleX(var(--urlbar-zoom)) !important;
+  transform-origin: center !important;
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 200ms ease !important;
+  opacity: 0.75 !important;
+}
+
+/* Строка в активном состоянии — полный размер с анимацией */
+#urlbar[focused],
+#urlbar[breakout-extend] {
+  transform: scaleX(1) !important;
+  transform-origin: center !important;
+  opacity: 1 !important;
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 200ms ease !important;
+}
+
+/* Фон строки — сливается с темой когда неактивна */
+#urlbar:not([focused]):not([breakout-extend]) .urlbar-background {
+  background-color: var(--toolbar-bgcolor) !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Фон строки когда активна */
+#urlbar[focused] .urlbar-background,
+#urlbar[breakout-extend] .urlbar-background {
   background-color: var(--toolbar-bgcolor) !important;
   border-color: transparent !important;
   box-shadow: none !important;
