@@ -224,3 +224,26 @@
 #unified-extensions-view .unified-extensions-list {
   max-width: max-content;
 }
+
+
+/* ===== BLUR EMAIL В МЕНЮ ===== */
+
+/* Hamburger menu */
+#appMenu-popup #appMenu-header-description {
+  filter: blur(4px) !important;
+  transition: filter 350ms ease-out !important;
+  transition-delay: 250ms !important;
+}
+#appMenu-popup #appMenu-fxa-label2:hover #appMenu-header-description {
+  filter: blur(0px) !important;
+}
+
+/* Sync menu */
+#customizationui-widget-panel #fxa-manage-account-button #fxa-menu-header-description {
+  filter: blur(4px) !important;
+  transition: filter 350ms ease-out !important;
+  transition-delay: 250ms !important;
+}
+#customizationui-widget-panel #fxa-manage-account-button:hover #fxa-menu-header-description {
+  filter: blur(0px) !important;
+}
