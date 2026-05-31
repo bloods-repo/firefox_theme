@@ -1,0 +1,55 @@
+/* ================================================
+   bloods-repo / firefox_theme — userChrome.css
+   ================================================ */
+
+/* ===== КНОПКИ УПРАВЛЕНИЯ ОКНОМ ===== */
+.titlebar-button {
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+#titlebar-close {
+  border-radius: 50% !important;
+  background-color: #E0443C !important;
+  margin: 4px 8px 4px 4px !important;
+  padding: 4px !important;
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+}
+
+#titlebar-close:hover {
+  background-color: #ff5f57 !important;
+}
+
+#titlebar-close .toolbarbutton-icon {
+  fill: white !important;
+  opacity: 1 !important;
+}
+
+/* ===== ПОИСКОВАЯ СТРОКА ===== */
+#urlbar,
+#urlbar:not([focused]),
+#urlbar[focused] {
+  background-color: var(--toolbar-bgcolor) !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* ===== СКРЫТЫЕ КНОПКИ ===== */
+#appMenu-install-button,
+#star-button-box,
+#pocket-button {
+  display: none !important;
+}
+
+/* ===== АКТИВНАЯ ВКЛАДКА ===== */
+.tabbrowser-tab[selected] .tab-label {
+  color: #E0443C !important;
+}
+
+.tabbrowser-tab[selected] .tab-background {
+  border: 1px solid rgba(224, 68, 60, 0.35) !important;
+  box-shadow: 0 0 0 1px rgba(224, 68, 60, 0.2) !important;
+}
