@@ -247,3 +247,39 @@
 #customizationui-widget-panel #fxa-manage-account-button:hover #fxa-menu-header-description {
   filter: blur(0px) !important;
 }
+
+
+/* ===== БОКОВАЯ ПАНЕЛЬ ВКЛАДОК ===== */
+
+/* Отступ от края и скругление */
+#sidebar-box {
+  margin: 8px 0 8px 8px !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+
+/* Скругление самого sidebar */
+#sidebar {
+  border-radius: 12px !important;
+}
+
+/* Вертикальные вкладки — контейнер */
+#vertical-tabs {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+
+/* Убираем границу между sidebar и контентом */
+#sidebar-splitter {
+  display: none !important;
+}
+
+/* Компенсируем пространство после скрытия splitter */
+#appcontent {
+  margin-left: 4px !important;
+}
+
+/* Скругление таббраузера внутри */
+#tabbrowser-tabs[orient="vertical"] {
+  border-radius: 12px !important;
+}
