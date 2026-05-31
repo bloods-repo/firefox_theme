@@ -248,38 +248,28 @@
   filter: blur(0px) !important;
 }
 
-
 /* ===== БОКОВАЯ ПАНЕЛЬ ВКЛАДОК ===== */
 
-/* Отступ от края и скругление */
-#sidebar-box {
+/* Основной контейнер вертикальных вкладок Firefox 131+ */
+#sidebar-main {
   margin: 8px 0 8px 8px !important;
   border-radius: 12px !important;
   overflow: hidden !important;
 }
 
-/* Скругление самого sidebar */
-#sidebar {
-  border-radius: 12px !important;
-}
-
-/* Вертикальные вкладки — контейнер */
-#vertical-tabs {
+/* Внутренний враппер */
+sidebar-main {
   border-radius: 12px !important;
   overflow: hidden !important;
 }
 
-/* Убираем границу между sidebar и контентом */
+/* Убираем разделитель */
+#sidebar-main + splitter,
 #sidebar-splitter {
   display: none !important;
 }
 
-/* Компенсируем пространство после скрытия splitter */
+/* Небольшой отступ от контента страницы */
 #appcontent {
   margin-left: 4px !important;
-}
-
-/* Скругление таббраузера внутри */
-#tabbrowser-tabs[orient="vertical"] {
-  border-radius: 12px !important;
 }
