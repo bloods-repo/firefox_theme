@@ -140,53 +140,63 @@
   box-shadow: 0 0 0 1px rgba(224, 68, 60, 0.2) !important;
 }
 
-/* ===== КОМПАКТНОЕ МЕНЮ РАСШИРЕНИЙ ===== */
+/* ===== КОМПАКТНОЕ МЕНЮ РАСШИРЕНИЙ (СЕТКА) ===== */
 
-/* Уменьшаем размер иконок расширений в меню */
-#unified-extensions-panel .unified-extensions-item {
-  padding: 2px 4px !important;
-  min-height: unset !important;
+/* Размер панели */
+#unified-extensions-panel {
+  max-width: 200px !important;
+  min-width: 200px !important;
 }
 
-#unified-extensions-panel .unified-extensions-item-action-button {
-  padding: 4px !important;
-  min-height: unset !important;
-  height: 36px !important;
-}
-
-/* Скрываем текст названий расширений — только иконки */
-#unified-extensions-panel .unified-extensions-item-name,
-#unified-extensions-panel .unified-extensions-item-message {
-  display: none !important;
-}
-
-/* Делаем панель сеткой 3 колонки */
-#unified-extensions-panel .unified-extensions-list {
+/* Сетка 4 колонки */
+#unified-extensions-panel panelview > .panel-subview-body {
   display: grid !important;
-  grid-template-columns: repeat(3, 1fr) !important;
-  gap: 2px !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 4px !important;
+  padding: 8px !important;
+}
+
+/* Каждый элемент — квадратная ячейка */
+#unified-extensions-panel .unified-extensions-item {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: unset !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 44px !important;
+  height: 44px !important;
+}
+
+/* Кнопка действия — занимает всю ячейку */
+#unified-extensions-panel .unified-extensions-item-action-button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 44px !important;
+  height: 44px !important;
   padding: 6px !important;
+  min-height: unset !important;
+  border-radius: 8px !important;
 }
 
-/* Размер иконок */
-#unified-extensions-panel .unified-extensions-item-icon {
-  width: 24px !important;
-  height: 24px !important;
-}
-
-/* Скрываем кнопку меню у каждого расширения */
+/* Скрываем название и сообщение */
+#unified-extensions-panel .unified-extensions-item-name,
+#unified-extensions-panel .unified-extensions-item-message,
 #unified-extensions-panel .unified-extensions-item-open-menu {
   display: none !important;
 }
 
-/* Компактный размер самой панели */
-#unified-extensions-panel {
-  max-width: 180px !important;
-  min-width: 160px !important;
+/* Иконка расширения */
+#unified-extensions-panel .unified-extensions-item-icon {
+  width: 24px !important;
+  height: 24px !important;
+  margin: 0 !important;
 }
 
-/* Центрируем иконку в ячейке */
-#unified-extensions-panel .unified-extensions-item-action-button {
-  justify-content: center !important;
-  border-radius: 8px !important;
+/* Кнопка Manage extensions — на всю ширину внизу */
+#unified-extensions-panel #unified-extensions-manage-extensions {
+  grid-column: 1 / -1 !important;
+  margin-top: 4px !important;
 }
