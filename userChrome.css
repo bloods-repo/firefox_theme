@@ -30,51 +30,28 @@
 
 /* ===== ПОИСКОВАЯ СТРОКА — SHRINK/EXPAND ===== */
 
-/* Анимация расширения при фокусе */
-@keyframes urlbar-expand {
-  from {
-    opacity: 0.7;
-    transform: scaleX(0.82);
-  }
-  to {
-    opacity: 1;
-    transform: scaleX(1);
-  }
-}
-
-/* Контейнер строки — центрируем трансформацию */
 #urlbar-container {
-  transform-origin: center !important;
+  transition: width 200ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+  width: 60% !important;
 }
 
-/* Строка в обычном состоянии — уменьшена */
-#urlbar:not([focused]):not([breakout-extend]) {
-  --urlbar-zoom: 0.82;
-  transform: scaleX(var(--urlbar-zoom)) !important;
-  transform-origin: center !important;
-  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 200ms ease !important;
-  opacity: 0.75 !important;
+#urlbar-container:hover {
+  width: 65% !important;
 }
 
-/* Строка в активном состоянии — полный размер с анимацией */
-#urlbar[focused],
-#urlbar[breakout-extend] {
-  transform: scaleX(1) !important;
-  transform-origin: center !important;
-  opacity: 1 !important;
-  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 200ms ease !important;
+#urlbar-container:has(#urlbar[focused]),
+#urlbar-container:has(#urlbar[breakout-extend]) {
+  width: 100% !important;
 }
 
-/* Фон строки — сливается с темой когда неактивна */
+/* Фон строки сливается с темой */
 #urlbar:not([focused]):not([breakout-extend]) .urlbar-background {
   background-color: var(--toolbar-bgcolor) !important;
   border-color: transparent !important;
   box-shadow: none !important;
+  transition: background-color 200ms ease !important;
 }
 
-/* Фон строки когда активна */
 #urlbar[focused] .urlbar-background,
 #urlbar[breakout-extend] .urlbar-background {
   background-color: var(--toolbar-bgcolor) !important;
