@@ -50,7 +50,7 @@
 
 #urlbar-container:has(#urlbar[focused]),
 #urlbar-container:has(#urlbar[breakout-extend]) {
-  width: 80% !important;
+  width: 60% !important;
 }
 
 /* Красный outline при фокусе */
