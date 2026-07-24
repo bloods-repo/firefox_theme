@@ -45,42 +45,32 @@
     try {
       const u = new URL(url);
       const host = u.hostname.replace(/^www\./, "");
-      // Check exact match
       if (DOMAINS[host]) return DOMAINS[host];
-      // Check parent domain (e.g. mail.google.com → google.com)
       const parts = host.split(".");
       if (parts.length > 2) {
         const parent = parts.slice(-2).join(".");
         if (DOMAINS[parent]) return DOMAINS[parent];
       }
-      // Fallback: capitalize first part of domain
       return parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
     } catch (e) {
       return null;
     }
   }
 
-  function updateUrlbar(urlbar) {
-    const input = urlbar.querySelector("#urlbar-input");
-    if (!input) return;
-
+  function showTitle(input) {
     const realUrl = gBrowser.currentURI?.spec;
-    if (!realUrl || realUrl === "about:blank" || realUrl === "about:newtab") return;
+    if (!realUrl || realUrl.startsWith("about:")) return;
+    const name = getSiteName(realUrl);
+    if (name) {
+      input.value = name;
+      input.style.textAlign = "center";
+    }
+  }
 
-    const isFocused = urlbar.hasAttribute("focused") || urlbar.hasAttribute("open");
-
-    if (!isFocused) {
-      const name = getSiteName(realUrl);
-      if (name && input.value !== name) {
-        input._realValue = input.value;
-        input.value = name;
-        input.style.textAlign = "center";
-      }
-    } else {
-      if (input._realValue) {
-        input.value = input._realValue;
-        input._realValue = null;
-      }
+  function showUrl(input) {
+    const realUrl = gBrowser.currentURI?.spec;
+    if (realUrl) {
+      input.value = realUrl;
       input.style.textAlign = "left";
     }
   }
@@ -88,31 +78,52 @@
   function init() {
     const urlbar = document.getElementById("urlbar");
     if (!urlbar) return;
+    const input = urlbar.querySelector("#urlbar-input");
+    if (!input) return;
 
-    // On page load / tab change
-    gBrowser.tabContainer.addEventListener("TabSelect", () => {
-      setTimeout(() => updateUrlbar(urlbar), 100);
+    // Blur — показываем название
+    urlbar.addEventListener("blur", () => {
+      setTimeout(() => {
+        if (!urlbar.hasAttribute("focused") && !urlbar.hasAttribute("open")) {
+          showTitle(input);
+        }
+      }, 100);
     });
 
-    // On navigation
-    gBrowser.addTabsProgressListener({
-      onLocationChange() {
-        setTimeout(() => updateUrlbar(urlbar), 100);
-      },
+    // Focus — показываем полный URL
+    urlbar.addEventListener("focus", () => {
+      showUrl(input);
+      input.select();
     });
 
-    // On focus/blur
-    urlbar.addEventListener("focus", () => updateUrlbar(urlbar));
-    urlbar.addEventListener("blur", () => setTimeout(() => updateUrlbar(urlbar), 50));
-
-    // Attribute changes (focused, open)
-    new MutationObserver(() => updateUrlbar(urlbar)).observe(urlbar, {
+    // Следим за атрибутами focused/open
+    new MutationObserver(() => {
+      const isFocused = urlbar.hasAttribute("focused") || urlbar.hasAttribute("open");
+      if (!isFocused) {
+        setTimeout(() => showTitle(input), 100);
+      }
+    }).observe(urlbar, {
       attributes: true,
       attributeFilter: ["focused", "open"],
     });
 
-    // Initial update
-    setTimeout(() => updateUrlbar(urlbar), 500);
+    // Смена вкладки / навигация
+    gBrowser.tabContainer.addEventListener("TabSelect", () => {
+      setTimeout(() => {
+        if (!urlbar.hasAttribute("focused")) showTitle(input);
+      }, 150);
+    });
+
+    gBrowser.addTabsProgressListener({
+      onLocationChange() {
+        setTimeout(() => {
+          if (!urlbar.hasAttribute("focused")) showTitle(input);
+        }, 150);
+      },
+    });
+
+    // Начальное состояние
+    setTimeout(() => showTitle(input), 600);
   }
 
   if (document.readyState === "complete") {
