@@ -83,7 +83,11 @@
 #appMenu-install-button,
 #star-button-box,
 #pocket-button,
-#taskbar-tabs-button {
+#taskbar-tabs-button,
+#tracking-protection-icon-container,
+#identity-box,
+#reader-mode-button,
+#urlbar-zoom-button {
   display: none !important;
 }
 
