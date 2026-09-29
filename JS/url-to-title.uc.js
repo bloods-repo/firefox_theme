@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name           URL to Site Title
-// @description    Shows site name in urlbar when not focused, full URL when focused
+// @description    Shows site name overlay in urlbar when not focused
 // ==/UserScript==
 
 (function () {
@@ -19,7 +19,6 @@
     "stackoverflow.com": "Stack Overflow",
     "twitch.tv": "Twitch",
     "discord.com": "Discord",
-    "discord.gg": "Discord",
     "notion.so": "Notion",
     "figma.com": "Figma",
     "claude.ai": "Claude",
@@ -57,73 +56,65 @@
     }
   }
 
-  function showTitle(input) {
-    const realUrl = gBrowser.currentURI?.spec;
-    if (!realUrl || realUrl.startsWith("about:")) return;
-    const name = getSiteName(realUrl);
-    if (name) {
-      input.value = name;
-      input.style.textAlign = "center";
-    }
-  }
-
-  function showUrl(input) {
-    const realUrl = gBrowser.currentURI?.spec;
-    if (realUrl) {
-      input.value = realUrl;
-      input.style.textAlign = "left";
-    }
-  }
-
   function init() {
     const urlbar = document.getElementById("urlbar");
     if (!urlbar) return;
+
+    const inputBox = urlbar.querySelector(".urlbar-input-box");
     const input = urlbar.querySelector("#urlbar-input");
-    if (!input) return;
+    if (!inputBox || !input) return;
 
-    // Blur — показываем название
-    urlbar.addEventListener("blur", () => {
-      setTimeout(() => {
-        if (!urlbar.hasAttribute("focused") && !urlbar.hasAttribute("open")) {
-          showTitle(input);
-        }
-      }, 100);
-    });
+    // Overlay поверх input — сам input не трогаем
+    const overlay = document.createElement("div");
+    overlay.id = "url-title-overlay";
+    overlay.style.cssText = `
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      color: inherit;
+      font: inherit;
+      z-index: 10;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    `;
 
-    // Focus — показываем полный URL
-    urlbar.addEventListener("focus", () => {
-      showUrl(input);
-      input.select();
-    });
+    inputBox.style.position = "relative";
+    inputBox.appendChild(overlay);
 
-    // Следим за атрибутами focused/open
-    new MutationObserver(() => {
+    function update() {
       const isFocused = urlbar.hasAttribute("focused") || urlbar.hasAttribute("open");
-      if (!isFocused) {
-        setTimeout(() => showTitle(input), 100);
+      const url = gBrowser.currentURI?.spec;
+
+      if (!isFocused && url && !url.startsWith("about:")) {
+        const name = getSiteName(url);
+        if (name) {
+          overlay.textContent = name;
+          overlay.style.display = "flex";
+          input.style.opacity = "0";
+          return;
+        }
       }
-    }).observe(urlbar, {
+
+      overlay.style.display = "none";
+      input.style.opacity = "1";
+    }
+
+    new MutationObserver(update).observe(urlbar, {
       attributes: true,
       attributeFilter: ["focused", "open"],
     });
 
-    // Смена вкладки / навигация
-    gBrowser.tabContainer.addEventListener("TabSelect", () => {
-      setTimeout(() => {
-        if (!urlbar.hasAttribute("focused")) showTitle(input);
-      }, 150);
-    });
+    gBrowser.tabContainer.addEventListener("TabSelect", () => setTimeout(update, 150));
 
     gBrowser.addTabsProgressListener({
-      onLocationChange() {
-        setTimeout(() => {
-          if (!urlbar.hasAttribute("focused")) showTitle(input);
-        }, 150);
-      },
+      onLocationChange() { setTimeout(update, 150); }
     });
 
-    // Начальное состояние
-    setTimeout(() => showTitle(input), 600);
+    setTimeout(update, 600);
   }
 
   if (document.readyState === "complete") {
